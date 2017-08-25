@@ -61,6 +61,7 @@ public class SpritzFillerRenderer implements GLSurfaceView.Renderer, SampleAppRe
     private Renderer mRenderer;
 
     private CylinderModel mCylinderModel;
+    private CocktailLevelModel mSpritzLevelModel;
     
     // dimensions of the cylinder (as set in the TMS tool)
     private float kCylinderHeight = 0.162f;
@@ -89,6 +90,8 @@ public class SpritzFillerRenderer implements GLSurfaceView.Renderer, SampleAppRe
     
     private boolean mIsActive = false;
     private boolean mModelIsLoaded = false;
+
+    float color[] = { 0.2f, 0.709803922f, 0.898039216f, 1.0f };
     
     
     public SpritzFillerRenderer(SpritzFiller activity,
@@ -200,6 +203,8 @@ public class SpritzFillerRenderer implements GLSurfaceView.Renderer, SampleAppRe
 
             mCylinderModel = new CylinderModel(kCylinderTopRadiusRatio);
 
+            mSpritzLevelModel = new CocktailLevelModel(kCylinderTopRadiusRatio, mRecipe);
+
             // Hide the Loading Dialog
             mActivity.loadingDialogHandler
                     .sendEmptyMessage(LoadingDialogHandler.HIDE_LOADING_DIALOG);
@@ -245,9 +250,8 @@ public class SpritzFillerRenderer implements GLSurfaceView.Renderer, SampleAppRe
             SampleUtils.checkGLError("SpritzFiller prepareCylinder");
             
             GLES20.glUseProgram(shaderProgramID);
-            
-            // Draw the cylinder:
-            
+
+            // Draw the cylinder (transparent but with culling so other objects won't show through:
             GLES20.glEnable(GLES20.GL_CULL_FACE);
             GLES20.glCullFace(GLES20.GL_BACK);
 
@@ -257,6 +261,7 @@ public class SpritzFillerRenderer implements GLSurfaceView.Renderer, SampleAppRe
                 GLES20.GL_FLOAT, false, 0, mCylinderModel.getTexCoords());
             
             GLES20.glEnableVertexAttribArray(vertexHandle);
+
             GLES20.glEnableVertexAttribArray(textureCoordHandle);
             
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
@@ -272,43 +277,31 @@ public class SpritzFillerRenderer implements GLSurfaceView.Renderer, SampleAppRe
             GLES20.glDisable(GLES20.GL_CULL_FACE);
             SampleUtils.checkGLError("SpritzFiller drawCylinder");
 
-            /*
-            // prepare the object
-            modelViewMatrix = Tool.convertPose2GLMatrix(result.getPose())
-                .getData();
-
-            // draw the anchored object
-            animateObject(modelViewMatrix);
-            
-            // we move away the object from the target
-            Matrix.translateM(modelViewMatrix, 0, 1.0f * kCylinderTopDiameter,
-                0.0f, kObjectScale);
-            Matrix.scaleM(modelViewMatrix, 0, kObjectScale, kObjectScale,
-                kObjectScale);
-            
-            Matrix.multiplyMM(modelViewProjection, 0, projectionMatrix, 0, modelViewMatrix, 0);
-            
-            GLES20.glUseProgram(shaderProgramID);
-            
+            // Draw cocktail indications
             GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT,
-                false, 0, mSphereModel.getVertices());
-            GLES20.glVertexAttribPointer(textureCoordHandle, 2,
-                GLES20.GL_FLOAT, false, 0, mSphereModel.getTexCoords());
-            
+                    false, 0, mSpritzLevelModel.getVertices());
+
+            /*GLES20.glVertexAttribPointer(textureCoordHandle, 2,
+                    GLES20.GL_FLOAT, false, 0, mSpritzLevelModel.getTexCoords());*/
+
+            GLES20.glEnableVertexAttribArray(vertexHandle);
+            //GLES20.glEnableVertexAttribArray(textureCoordHandle);
+
+            //cannot make the color work, so use a one color texture :/
+            int colorHandle = GLES20.glGetUniformLocation(shaderProgramID, "vColor");
+            // Set color for drawing the triangle
+            GLES20.glUniform4fv(colorHandle, 1, color, 0);
+
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,
-                mTextures.get(1).mTextureID[0]);
-            GLES20.glUniform1i(texSampler2DHandle, 0);
+                    mTextures.get(1).mTextureID[0]);
+
             GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false,
-                modelViewProjection, 0);
-            GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0,
-                mSphereModel.getNumObjectVertex());
-            
-            GLES20.glDisableVertexAttribArray(vertexHandle);
-            GLES20.glDisableVertexAttribArray(textureCoordHandle);
-            
-            SampleUtils.checkGLError("SpritzFiller renderFrame");
-            */
+                    modelViewProjection, 0);
+            GLES20.glUniform1i(texSampler2DHandle, 0);
+            GLES20.glDrawElements(GLES20.GL_TRIANGLES,
+                    mSpritzLevelModel.getNumObjectIndex(), GLES20.GL_UNSIGNED_SHORT,
+                    mSpritzLevelModel.getIndices());
         }
         
         GLES20.glDisable(GLES20.GL_BLEND);

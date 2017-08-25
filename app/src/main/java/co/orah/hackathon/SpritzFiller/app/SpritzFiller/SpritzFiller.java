@@ -146,7 +146,9 @@ public class SpritzFiller extends Activity implements SampleApplicationControl
     private void loadTextures()
     {
         mTextures.add(Texture.loadTextureFromApk(
-            "SpritzFiller/grid.png", getAssets()));
+            "SpritzFiller/transparent.png", getAssets()));
+        mTextures.add(Texture.loadTextureFromApk(
+                "SpritzFiller/texturefill.png", getAssets()));
     }
     
     

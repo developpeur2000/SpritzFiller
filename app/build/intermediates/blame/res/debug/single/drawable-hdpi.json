@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "C:\\Users\\videostitch\\AppData\\Local\\Android\\vuforia-sdk-android-6-2-10\\samples\\SpritzFiller\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\logo.png",
+        "source": "C:\\Users\\videostitch\\AppData\\Local\\Android\\vuforia-sdk-android-6-2-10\\samples\\SpritzFiller\\app\\src\\main\\res\\drawable-hdpi\\logo.png"
+    },
+    {
+        "merged": "C:\\Users\\videostitch\\AppData\\Local\\Android\\vuforia-sdk-android-6-2-10\\samples\\VuforiaSamples-6-2-10\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\logo.png",
+        "source": "C:\\Users\\videostitch\\AppData\\Local\\Android\\vuforia-sdk-android-6-2-10\\samples\\VuforiaSamples-6-2-10\\app\\src\\main\\res\\drawable-hdpi\\logo.png"
+    },
+    {
+        "merged": "C:\\Users\\videostitch\\AppData\\Local\\Android\\vuforia-sdk-android-6-2-10\\samples\\SpritzFiller-6-2-10\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\logo.png",
+        "source": "C:\\Users\\videostitch\\AppData\\Local\\Android\\vuforia-sdk-android-6-2-10\\samples\\SpritzFiller-6-2-10\\app\\src\\main\\res\\drawable-hdpi\\logo.png"
+    },
+    {
+        "merged": "C:\\Users\\videostitch\\AppData\\Local\\Android\\vuforia-sdk-android-6-2-10\\samples\\VuforiaSamples-6-2-10\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\icon.png",
+        "source": "C:\\Users\\videostitch\\AppData\\Local\\Android\\vuforia-sdk-android-6-2-10\\samples\\VuforiaSamples-6-2-10\\app\\src\\main\\res\\drawable-hdpi\\icon.png"
+    },
+    {
+        "merged": "C:\\Users\\videostitch\\AppData\\Local\\Android\\vuforia-sdk-android-6-2-10\\samples\\SpritzFiller\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\icon.png",
+        "source": "C:\\Users\\videostitch\\AppData\\Local\\Android\\vuforia-sdk-android-6-2-10\\samples\\SpritzFiller\\app\\src\\main\\res\\drawable-hdpi\\icon.png"
+    },
+    {
+        "merged": "C:\\Users\\videostitch\\AppData\\Local\\Android\\vuforia-sdk-android-6-2-10\\samples\\SpritzFiller-6-2-10\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\icon.png",
+        "source": "C:\\Users\\videostitch\\AppData\\Local\\Android\\vuforia-sdk-android-6-2-10\\samples\\SpritzFiller-6-2-10\\app\\src\\main\\res\\drawable-hdpi\\icon.png"
+    }
+]

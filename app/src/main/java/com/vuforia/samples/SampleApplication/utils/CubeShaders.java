@@ -29,5 +29,12 @@ public class CubeShaders
         + "void main() \n"
         + "{ \n" + "   gl_FragColor = texture2D(texSampler2D, texCoord); \n"
         + "} \n";
-    
+
+    public static final String CUBE_MESH_FRAGMENT_SHADER_SOLID_COLOR = " \n" + "\n"
+            + "precision mediump float; \n" + " \n"
+            + "uniform vec4 vColor; \n"
+            + "void main() \n"
+            + "{ \n" + "   gl_FragColor = vColor; \n"
+            + "} \n";
+
 }

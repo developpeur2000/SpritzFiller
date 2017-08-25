@@ -57,7 +57,8 @@ public class SpritzFillerRenderer implements GLSurfaceView.Renderer, SampleAppRe
     private int textureCoordHandle;
     private int mvpMatrixHandle;
     private int texSampler2DHandle;
-    
+    private int colorHandle;
+
     private Renderer mRenderer;
 
     private CylinderModel mCylinderModel;
@@ -91,7 +92,8 @@ public class SpritzFillerRenderer implements GLSurfaceView.Renderer, SampleAppRe
     private boolean mIsActive = false;
     private boolean mModelIsLoaded = false;
 
-    float color[] = { 0.2f, 0.709803922f, 0.898039216f, 1.0f };
+    float transparentColor[] = { 1.0f, 1.0f, 1.0f, 0.0f };
+    float color[] = { 0.984f, 0.388f, 0.0f, 1.0f };
     
     
     public SpritzFillerRenderer(SpritzFiller activity,
@@ -184,7 +186,7 @@ public class SpritzFillerRenderer implements GLSurfaceView.Renderer, SampleAppRe
 
         shaderProgramID = SampleUtils.createProgramFromShaderSrc(
             CubeShaders.CUBE_MESH_VERTEX_SHADER,
-            CubeShaders.CUBE_MESH_FRAGMENT_SHADER);
+                CubeShaders.CUBE_MESH_FRAGMENT_SHADER_SOLID_COLOR/*CubeShaders.CUBE_MESH_FRAGMENT_SHADER*/);
         SampleUtils.checkGLError("GLInitRendering");
         vertexHandle = GLES20.glGetAttribLocation(shaderProgramID,
             "vertexPosition");
@@ -192,8 +194,9 @@ public class SpritzFillerRenderer implements GLSurfaceView.Renderer, SampleAppRe
             "vertexTexCoord");
         mvpMatrixHandle = GLES20.glGetUniformLocation(shaderProgramID,
             "modelViewProjectionMatrix");
-        texSampler2DHandle = GLES20.glGetUniformLocation(shaderProgramID,
-            "texSampler2D");
+        colorHandle = GLES20.glGetUniformLocation(shaderProgramID, "vColor");
+        /*texSampler2DHandle = GLES20.glGetUniformLocation(shaderProgramID,
+            "texSampler2D");*/
         SampleUtils.checkGLError("GLInitRendering due");
         SampleUtils
             .checkGLError("SpritzFiller GLInitRendering getting location att and unif");
@@ -225,9 +228,6 @@ public class SpritzFillerRenderer implements GLSurfaceView.Renderer, SampleAppRe
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
         SampleUtils.checkGLError("SpritzFiller drawVideoBackground");
         
-        GLES20.glEnable(GLES20.GL_CULL_FACE);
-        GLES20.glCullFace(GLES20.GL_BACK);
-
         // did we find any trackables this frame?
         for (int tIdx = 0; tIdx < state.getNumTrackableResults(); tIdx++)
         {
@@ -238,7 +238,7 @@ public class SpritzFillerRenderer implements GLSurfaceView.Renderer, SampleAppRe
             
             Matrix44F modelViewMatrix_Vuforia;
             float[] modelViewProjection = new float[16];
-            
+
             // prepare the cylinder
             modelViewMatrix_Vuforia = Tool.convertPose2GLMatrix(result
                 .getPose());
@@ -259,17 +259,19 @@ public class SpritzFillerRenderer implements GLSurfaceView.Renderer, SampleAppRe
                 false, 0, mCylinderModel.getVertices());
             GLES20.glVertexAttribPointer(textureCoordHandle, 2,
                 GLES20.GL_FLOAT, false, 0, mCylinderModel.getTexCoords());
-            
-            GLES20.glEnableVertexAttribArray(vertexHandle);
 
+            GLES20.glEnableVertexAttribArray(vertexHandle);
             GLES20.glEnableVertexAttribArray(textureCoordHandle);
-            
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+
+            /*GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,
                 mTextures.get(0).mTextureID[0]);
+            GLES20.glUniform1i(texSampler2DHandle, 0);
+            */
+            GLES20.glUniform4fv(colorHandle, 1, transparentColor, 0);
+
             GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false,
                 modelViewProjection, 0);
-            GLES20.glUniform1i(texSampler2DHandle, 0);
             GLES20.glDrawElements(GLES20.GL_TRIANGLES,
                 mCylinderModel.getNumObjectIndex(), GLES20.GL_UNSIGNED_SHORT,
                 mCylinderModel.getIndices());
@@ -281,24 +283,17 @@ public class SpritzFillerRenderer implements GLSurfaceView.Renderer, SampleAppRe
             GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT,
                     false, 0, mSpritzLevelModel.getVertices());
 
-            /*GLES20.glVertexAttribPointer(textureCoordHandle, 2,
-                    GLES20.GL_FLOAT, false, 0, mSpritzLevelModel.getTexCoords());*/
-
             GLES20.glEnableVertexAttribArray(vertexHandle);
-            //GLES20.glEnableVertexAttribArray(textureCoordHandle);
 
-            //cannot make the color work, so use a one color texture :/
-            int colorHandle = GLES20.glGetUniformLocation(shaderProgramID, "vColor");
-            // Set color for drawing the triangle
-            GLES20.glUniform4fv(colorHandle, 1, color, 0);
-
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+/*            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,
                     mTextures.get(1).mTextureID[0]);
+            GLES20.glUniform1i(texSampler2DHandle, 0);
+*/
+            GLES20.glUniform4fv(colorHandle, 1, color, 0);
 
             GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false,
                     modelViewProjection, 0);
-            GLES20.glUniform1i(texSampler2DHandle, 0);
             GLES20.glDrawElements(GLES20.GL_TRIANGLES,
                     mSpritzLevelModel.getNumObjectIndex(), GLES20.GL_UNSIGNED_SHORT,
                     mSpritzLevelModel.getIndices());

@@ -45,7 +45,9 @@ public class SpritzFillerRenderer implements GLSurfaceView.Renderer, SampleAppRe
     
     // Reference to main activity
     private SpritzFiller mActivity;
-    
+
+    private CocktailRecipe mRecipe;
+
     private SampleApplicationSession vuforiaAppSession;
     private SampleAppRenderer mSampleAppRenderer;
 
@@ -90,10 +92,12 @@ public class SpritzFillerRenderer implements GLSurfaceView.Renderer, SampleAppRe
     
     
     public SpritzFillerRenderer(SpritzFiller activity,
-        SampleApplicationSession session)
+        SampleApplicationSession session,
+        CocktailRecipe recipe)
     {
         mActivity = activity;
         vuforiaAppSession = session;
+        mRecipe = recipe;
 
         // SampleAppRenderer used to encapsulate the use of RenderingPrimitives setting
         // the device mode AR/VR and stereo mode

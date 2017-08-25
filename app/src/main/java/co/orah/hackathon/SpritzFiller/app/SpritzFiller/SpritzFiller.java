@@ -50,6 +50,9 @@ public class SpritzFiller extends Activity implements SampleApplicationControl
     private static final String LOGTAG = "CylinderTargets";
     
     SampleApplicationSession vuforiaAppSession;
+
+    //The recipe !
+    private CocktailRecipe mSpritzRecipe;
     
     // Our OpenGL view:
     private SampleApplicationGLView mGlView;
@@ -79,6 +82,12 @@ public class SpritzFiller extends Activity implements SampleApplicationControl
     {
         Log.d(LOGTAG, "onCreate");
         super.onCreate(savedInstanceState);
+
+        CocktailIngredient[] ingredients = new CocktailIngredient[3];
+        ingredients[0] = new CocktailIngredient("Aperol", 3);
+        ingredients[1] = new CocktailIngredient("Prosecco", 2);
+        ingredients[2] = new CocktailIngredient("Soda water", 1);
+        mSpritzRecipe = new CocktailRecipe(ingredients);
         
         vuforiaAppSession = new SampleApplicationSession(this);
         
@@ -257,7 +266,7 @@ public class SpritzFiller extends Activity implements SampleApplicationControl
         mGlView = new SampleApplicationGLView(this);
         mGlView.init(translucent, depthSize, stencilSize);
         
-        mRenderer = new SpritzFillerRenderer(this, vuforiaAppSession);
+        mRenderer = new SpritzFillerRenderer(this, vuforiaAppSession, mSpritzRecipe);
         mRenderer.setTextures(mTextures);
         mGlView.setRenderer(mRenderer);
         
